@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.idea
+.DS_Store
+*.swp
+screenshot*.png
+
+tests_api.py
+
+# virtualenv
+/venv/**
+
+# pep8 linter
+.flake8
+
+# extra files
+token.txt
+purpose-example.json
+data-type-example.json
+
+

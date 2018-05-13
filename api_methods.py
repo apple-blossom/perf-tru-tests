@@ -1,7 +1,6 @@
 import requests
 import binascii
 import jwt
-import ast
 
 
 class ApiRequests(object):

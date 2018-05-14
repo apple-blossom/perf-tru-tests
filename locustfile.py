@@ -81,10 +81,10 @@ class LoadTest(TaskSet, Base):
                          },
                          headers={"authorization": jwt_token})
 
-    def consent_grant(self, context_id, jwt_token):
-        self.client.post("/ledger/context/" + context_id + "/" + "consent-grant",
+    def consent_grant(self, context_id, dt, jwt_token):
+        res = self.client.post("/ledger/context/" + context_id + "/" + "consent-grant",
                          json={"payload": {
-                             "consentDefinitionId": 0,
+                             "consentDefinitionId": 0, #add this!
                              "customData": "string",
                              "moc": "string",
                              "genericFields": {
@@ -97,11 +97,12 @@ class LoadTest(TaskSet, Base):
                                      "string"
                                  ]
                              },
-                             "dataTypeId": "4c0caf30-4c6f-11e7-907c-716e1cb74214"
+                             "dataTypeId": dt
                          }
                          },
                          headers={"authorization": jwt_token})
-        # print(res.content)
+        if res.status_code != 200:
+            print(res.content, res.url, dt, context_id)
 
     def consent_revoke(self, context_id, jwt_token):
         self.client.post("/ledger/context/" + context_id + "/" + "consent-revoke",
@@ -138,7 +139,8 @@ class LoadTest(TaskSet, Base):
     def grant_revoke_get_rights(self):
         jwt_token = self.create_jwt()
         for el in self.open_ids_json():
-            self.consent_grant(el["context_id"], jwt_token)
+            # print(el["context_id"], el["data_type_id"])
+            self.consent_grant(el["context_id"], el["data_type_id"], jwt_token)
             self.consent_revoke(el["context_id"], jwt_token)
             self.consent_rights(el["data_type_id"], el["context_id"], jwt_token)
 

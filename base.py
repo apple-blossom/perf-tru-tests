@@ -24,10 +24,11 @@ class Base(object):
 
     @staticmethod
     def random_user_id():
-        user = str(random.randint(1000, 9999))
-        return user
+        user = random.sample(range(1, 1000), 1)
+        return str(user)
 
-    def copy_all_file_text(self, path):
+    @staticmethod
+    def copy_all_file_text(path):
         with open(path, 'r') as f:
             data = f.read()
         return data

@@ -120,6 +120,8 @@ class ApiRequests(object):
         key = self.copy_all_file_text(path_to_key)
         result = jwt.encode(payload, key, algorithm='RS512')
         result = b"Bearer " + result
+        result = str(result)
+        result = result[2:-1]
         # print(result)
         return result
 

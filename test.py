@@ -1,7 +1,15 @@
 import json
 import jwt
+import random
 import requests
+from ddt import ddt, file_data, data
 
+
+def random_user_id():
+    user = str(random.randint(1000, 9999))
+    return user
+
+USER = random_user_id()
 
 def copy_all_file_text(path):
         with open(path, 'r') as f:
@@ -18,7 +26,7 @@ def open_data_json():
 
 def create_jwt():
     enterprise = open_data_json()["enterprise_id"]
-    user = "sarah_6@gmail.com"
+    user = USER
     payload = {
         "iss": enterprise,
         "aud": [
@@ -38,21 +46,21 @@ def create_jwt():
 
 def ledger_list():
     response = requests.get("https://test.trunomi.com/ledger",
-                            data={"customerId": open_data_json()["user"],
+                            data={"customerId": USER,
                                   "enterpriseId": open_data_json()["enterprise_id"]},
                             headers={"authorization": create_jwt()})
     print(response.url, response.status_code)
 
-def consent_last_ledger():
-    response = requests.get("https://test.trunomi.com/ledger/context/" + open_data_json()["context_ids"][4] + "/last",
-                 data={"customerId": "ererer",
+def consent_last_ledger(context_id):
+    response = requests.get("https://test.trunomi.com/ledger/context/" + context_id + "/last",
+                 data={"customerId": USER,
                        "enterpriseId": open_data_json()["enterprise_id"]},
                  headers={"authorization": create_jwt()}
                  )
     print(response.url, response.status_code)
 
-def consent_message():
-    response = requests.post("https://test.trunomi.com/ledger/context/" + open_data_json()["context_ids"][4] + "/" + "message",
+def consent_message(context_id):
+    response = requests.post("https://test.trunomi.com/ledger/context/" + context_id + "/" + "message",
                              json={
                                   "payload": {
                                     "consentDefinitionId": 0,
@@ -76,8 +84,8 @@ def consent_message():
                              headers={"authorization": create_jwt()})
     print(response.url, response.status_code, response.text)
 
-def consent_deny():
-    response = requests.post("https://test.trunomi.com/ledger/context/" + open_data_json()["context_ids"][4] + "/" + "consent-deny",
+def consent_deny(context_id):
+    response = requests.post("https://test.trunomi.com/ledger/context/" + context_id + "/" + "consent-deny",
                              json={"payload": {
                                  "consentDefinitionId": 0,
                                  "customData": "string",
@@ -97,8 +105,8 @@ def consent_deny():
                              headers={"authorization": create_jwt()})
     print(response.url, response.status_code, response.text)
 
-def consent_grant():
-    response = requests.post("https://test.trunomi.com/ledger/context/" + open_data_json()["context_ids"][4] + "/" + "consent-grant",
+def consent_grant(context_id):
+    response = requests.post("https://test.trunomi.com/ledger/context/" + context_id + "/" + "consent-grant",
                      json={"payload": {
                          "consentDefinitionId": 0,
                          "customData": "string",
@@ -117,11 +125,11 @@ def consent_grant():
                      }
                      },
                      headers={"authorization": create_jwt()})
-    # print(response.url, response.status_code, response.text)
+    print(response.url, response.status_code, response.text)
 
 
-def consent_revoke():
-    response = requests.post("https://test.trunomi.com/ledger/context/" + open_data_json()["context_ids"][4] + "/" + "consent-revoke",
+def consent_revoke(context_id):
+    response = requests.post("https://test.trunomi.com/ledger/context/" + context_id + "/" + "consent-revoke",
                  json={"payload": {
                      "consentDefinitionId": 0,
                      "customData": "string",
@@ -139,25 +147,28 @@ def consent_revoke():
                  }
                  },
                  headers={"authorization": create_jwt()})
-    # print(response.url, response.status_code, response.text)
+    print(response.url, response.status_code, response.text)
 
-def consent_rights():
+
+@ddt
+@file_data('./ids.json')
+def consent_rights(data_type_id, context_id):
     response = requests.post("https://test.trunomi.com/rights/query",
                  json={
-                  "contextId": "string",
+                  "contextId": context_id,
                   "consentDefinitionId": 0,
                   "dataTypeId": [
-                    "string"
+                    data_type_id
                   ]
                  },
                  headers={"authorization": create_jwt()})
     print(response.url, response.status_code, response.text)
 
 
-# ledger_list()
-# consent_last_ledger()
-# consent_message()
-# consent_deny()
-# consent_grant()
-# consent_revoke()
-consent_rights()
+ledger_list()
+consent_last_ledger("77791cf0-4c9a-11e7-83e5-950adef43067")
+consent_message("77791cf0-4c9a-11e7-83e5-950adef43067")
+consent_deny("77791cf0-4c9a-11e7-83e5-950adef43067")
+consent_grant("77791cf0-4c9a-11e7-83e5-950adef43067")
+consent_revoke("77791cf0-4c9a-11e7-83e5-950adef43067")
+consent_rights("77791cf0-4c9a-11e7-83e5-950adef43067", "4c0caf30-4c6f-11e7-907c-716e1cb74214")

@@ -1,6 +1,6 @@
 {
   "ENTERPRISE_ID" : "358e5e20-4c65-11e7-b640-4be264b2cb75",
-  "CUSTOMER_ID" : "test_dude",
+  "CUSTOMER_ID" : "gfgdgdfgdg",
   "HOST_ADDRESS" : "https://perf.trunomi.com",
   "PATH_TO_KEY" : "./private_key.txt",
   "DATA_TYPE_IDS" : ["4c0caf30-4c6f-11e7-907c-716e1cb74214", "eceed3ee-4c72-11e7-b114-b2f933d5fe66", "1f7a4c9a-4c72-11e7-b114-b2f933d5fe66", "a5b1aa6a-4c72-11e7-b114-b2f933d5fe66", "c978ae30-4c72-11e7-b114-b2f933d5fe66", "5c38c6f2-4c72-11e7-b114-b2f933d5fe66"],

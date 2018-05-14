@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import time
+import random
 import requests
 import datetime
 import os
@@ -21,6 +22,16 @@ class Base(object):
     def __init__(self, driver):
         self.driver = driver
 
+    @staticmethod
+    def random_user_id():
+        user = str(random.randint(1000, 9999))
+        return user
+
+    def copy_all_file_text(self, path):
+        with open(path, 'r') as f:
+            data = f.read()
+        return data
+
     def verify_server_available(self, url):
         response = requests.get(url)
         if response.status_code != 200:
@@ -34,6 +45,13 @@ class Base(object):
                         dt_ids=file['DATA_TYPE_IDS'], context_ids=file['CONTEXT_IDS'],
                         widgets=file['WIDGETS_URL'])
         return data
+
+    def open_ids_json(self):
+        with open('./ids.json', 'r') as f:
+            file = json.load(f)
+            for el in file:
+                el = dict(el)
+                yield el
 
     def setup_with_headless(self):
         options = webdriver.ChromeOptions()

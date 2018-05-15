@@ -51,3 +51,7 @@ class TestWidgets(unittest.TestCase, Base):
         for row in range(2, rows):
             self.pref.apply_dsr(WidgetsMainLocators.table_elements(row)["data_rows_dsr_menu"],
                                 *WidgetsMainLocators.table_elements(row)["data_rows_dsr_open"])
+
+
+if __name__ == "__main__":
+    unittest.main()

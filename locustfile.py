@@ -1,17 +1,16 @@
 import jwt
+import unittest
+
 from locust import HttpLocust, TaskSet, task
+
 from base import Base
-from test_widgets import TestWidgets
-# from pages import *
-# from locators import *
-# from api_methods import ApiRequests
+import test_widgets
 
 
 class LoadTest(TaskSet, Base):
 
-    def create_jwt(self):
+    def create_jwt(self, user):
         enterprise = self.open_data_json()["enterprise_id"]
-        user = self.random_user_id()
         payload = {
             "iss": enterprise,
             "aud": [
@@ -29,19 +28,19 @@ class LoadTest(TaskSet, Base):
         result = b"Bearer " + result
         return result
 
-    @task(1)
+    @task(2)
     def ledger_list(self):
+        user = self.random_user_id()
         self.client.get("/ledger",
                                 data={"customerId": self.random_user_id(),
                                       "enterpriseId": self.open_data_json()["enterprise_id"]},
-                                headers={"authorization": self.create_jwt()})
+                                headers={"authorization": self.create_jwt(user)})
 
-    @task(2)
-    def consent_message(self):
-        self.client.post("/ledger/context/" + self.open_data_json()["context_ids"][0] + "/" + "message",
+    def consent_message(self, context_id, consent_id, jwt_token):
+        res = self.client.post("/ledger/context/" + context_id + "/" + "message",
                                  json={
                                      "payload": {
-                                         "consentDefinitionId": 0,
+                                         "consentDefinitionId": consent_id,
                                          "event": "string",
                                          "message": "string",
                                          "customData": "string",
@@ -59,12 +58,14 @@ class LoadTest(TaskSet, Base):
                                          }
                                      }
                                  },
-                                 headers={"authorization": self.create_jwt()})
+                                 headers={"authorization": jwt_token})
+        if res.status_code != 200:
+            print(res.content, res.url, context_id)
 
-    def consent_deny(self, context_id, jwt_token):
-        self.client.post("/ledger/context/" + context_id + "/" + "consent-deny",
+    def consent_deny(self, context_id, consent_id, jwt_token):
+        res = self.client.post("/ledger/context/" + context_id + "/" + "consent-deny",
                          json={"payload": {
-                             "consentDefinitionId": 0,
+                             "consentDefinitionId": consent_id,
                              "customData": "string",
                              "moc": "string",
                              "genericFields": {
@@ -80,11 +81,13 @@ class LoadTest(TaskSet, Base):
                          }
                          },
                          headers={"authorization": jwt_token})
+        if res.status_code != 200:
+            print(res.content, res.url, context_id)
 
-    def consent_grant(self, context_id, dt, jwt_token):
+    def consent_grant(self, context_id, consent_id, dt, jwt_token):
         res = self.client.post("/ledger/context/" + context_id + "/" + "consent-grant",
                          json={"payload": {
-                             "consentDefinitionId": 0, #add this!
+                             "consentDefinitionId": consent_id,
                              "customData": "string",
                              "moc": "string",
                              "genericFields": {
@@ -104,10 +107,10 @@ class LoadTest(TaskSet, Base):
         if res.status_code != 200:
             print(res.content, res.url, dt, context_id)
 
-    def consent_revoke(self, context_id, jwt_token):
-        self.client.post("/ledger/context/" + context_id + "/" + "consent-revoke",
+    def consent_revoke(self, context_id, consent_id, jwt_token):
+        res = self.client.post("/ledger/context/" + context_id + "/" + "consent-revoke",
                          json={"payload": {
-                             "consentDefinitionId": 0,
+                             "consentDefinitionId": consent_id,
                              "customData": "string",
                              "moc": "string",
                              "genericFields": {
@@ -123,26 +126,46 @@ class LoadTest(TaskSet, Base):
                          }
                          },
                          headers={"authorization": jwt_token})
+        if res.status_code != 200:
+            print(res.content, res.url, context_id)
 
-    def consent_rights(self, data_type_id, context_id, jwt_token):
-        self.client.post("/rights/query",
+    def consent_rights(self,context_id, consent_id,  data_type_id, jwt_token):
+        res = self.client.post("/rights/query",
                          json={
                              "contextId": context_id,
-                             "consentDefinitionId": 0,
+                             "consentDefinitionId": consent_id,
                              "dataTypeId": [
                                  data_type_id
                              ]
                          },
                          headers={"authorization": jwt_token})
+        if res.status_code != 200:
+            print(res.content, res.url, data_type_id, context_id)
 
-    @task(2)
+    @task(4)
     def grant_revoke_get_rights(self):
-        jwt_token = self.create_jwt()
+        user = self.random_user_id()
+        # print("USER", user)
+        jwt_token = self.create_jwt(user)
         for el in self.open_ids_json():
             # print(el["context_id"], el["data_type_id"])
-            self.consent_grant(el["context_id"], el["data_type_id"], jwt_token)
-            self.consent_revoke(el["context_id"], jwt_token)
-            self.consent_rights(el["data_type_id"], el["context_id"], jwt_token)
+            self.consent_grant(el["context_id"], el["consent_id"], el["data_type_id"], jwt_token)
+            self.consent_revoke(el["context_id"], el["consent_id"],  jwt_token)
+            self.consent_rights(el["context_id"],  el["consent_id"], el["data_type_id"], jwt_token)
+
+    @task(8)
+    def message_deny_get_rights(self):
+        user = self.random_user_id()
+        print("USER", user)
+        jwt_token = self.create_jwt(user)
+        for el in self.open_ids_json():
+            # self.consent_deny(el["context_id"],  el["consent_id"], jwt_token)
+            self.consent_message(el["context_id"], el["consent_id"], jwt_token)
+            self.consent_rights(el["context_id"],  el["consent_id"], el["data_type_id"], jwt_token)
+
+    @task(1)
+    def run_selenium_test(self):
+        test_widgets.unittest.main()
 
 
 class MyLocust(HttpLocust):

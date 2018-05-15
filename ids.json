@@ -1,6 +1,20 @@
 [
+  {"data_type_id" : "4c0caf30-4c6f-11e7-907c-716e1cb74214",
+"context_id" : "76747e30-4c9a-11e7-9100-d3d75d8f7d4f",
+  "consent_id" : "0"},
+{"data_type_id" : "1f7a4c9a-4c72-11e7-b114-b2f933d5fe66",
+"context_id" : "76747e30-4c9a-11e7-9100-d3d75d8f7d4f",
+  "consent_id" : "1"},
   {"data_type_id" : "5c38c6f2-4c72-11e7-b114-b2f933d5fe66",
-"context_id" : "76f80610-4c9a-11e7-9b5a-0f5a506a228b"},
-{"data_type_id" : "1f7a4c9a-4c72-11e7-b114-b2f933d5fe66" ,
-"context_id" : "76747e30-4c9a-11e7-9100-d3d75d8f7d4f"}
+"context_id" : "76f80610-4c9a-11e7-9b5a-0f5a506a228b",
+  "consent_id" : "1"},
+  {"data_type_id" : "a5b1aa6a-4c72-11e7-b114-b2f933d5fe66",
+"context_id" : "77791cf0-4c9a-11e7-83e5-950adef43067",
+  "consent_id" : "0"},
+  {"data_type_id" : "c978ae30-4c72-11e7-b114-b2f933d5fe66",
+"context_id" : "77791cf0-4c9a-11e7-83e5-950adef43067",
+  "consent_id" : "1"},
+  {"data_type_id" : "eceed3ee-4c72-11e7-b114-b2f933d5fe66",
+"context_id" : "77fc7dc0-4c9a-11e7-a9a4-1f09afff1a73",
+  "consent_id" : "0"}
 ]

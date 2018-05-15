@@ -1,5 +1,5 @@
 import jwt
-import unittest
+# import unittest
 
 from locust import HttpLocust, TaskSet, task
 
@@ -163,9 +163,9 @@ class LoadTest(TaskSet, Base):
             self.consent_message(el["context_id"], el["consent_id"], jwt_token)
             self.consent_rights(el["context_id"],  el["consent_id"], el["data_type_id"], jwt_token)
 
-    @task(1)
-    def run_selenium_test(self):
-        test_widgets.unittest.main()
+    # @task(1)
+    # def run_selenium_test(self):
+    #     test_widgets.unittest.main()
 
 
 class MyLocust(HttpLocust):

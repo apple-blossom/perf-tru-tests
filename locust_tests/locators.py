@@ -13,7 +13,7 @@ class WidgetsMainLocators(object):
                                          "tr:nth-of-type({}) .btn.toggle-off.btn-md.btn-default".format(row_number)),
             "permissions_rows_btn_on": (By.CSS_SELECTOR, "div.panel-group>div.panel.panel-default:nth-of-type(1) "
                                         "tr:nth-of-type({}) .btn.toggle-on.btn-md.btn-success".format(row_number)),
-            "data_rows_dsr_open": (By.CSS_SELECTOR, "div.panel-group>div.panel.panel-default:nth-of-type(2) "
+            "data_rows_dsr_open": ("div.panel-group>div.panel.panel-default:nth-of-type(2) "
                                    "tr:nth-of-type({}) #dropdown-size-medium".format(row_number)),
             "data_rows_dsr_menu": (By.CSS_SELECTOR, "div.panel-group>div.panel.panel-default:nth-of-type(2) "
                                    "tr:nth-of-type({}) .dropdown-menu".format(row_number)),
@@ -42,6 +42,7 @@ class WidgetsPrefcenterLocators(object):
     ACCESS = (By.XPATH, "//*[contains(text(),'Access')]")
     RECTIFY = (By.XPATH, "//*[contains(text(),'Rectify')]")
     ERASE = (By.XPATH, "//*[contains(text(),'Erase')]")
+    MENU = (By.CSS_SELECTOR, ".dropdown-menu")
     SPINNER = (By.CSS_SELECTOR, ".icon-spin1.animate-spin.loadingIcon")
     MY_DATA = (By.CSS_SELECTOR, ".panel.panel-default:nth-of-type(2) a.collapsed")
     REASONS_POPUP = (By.CSS_SELECTOR, ".blueDiv.alert.alert-info")

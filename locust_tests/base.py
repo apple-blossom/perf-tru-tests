@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-import random
+# import random
+import uuid
 import requests
 import datetime
 import os
@@ -24,7 +25,8 @@ class Base(object):
 
     @staticmethod
     def random_user_id():
-        user = random.sample(range(1, 1000), 1)
+        # user = random.sample(range(1, 1000), 1)
+        user = uuid.uuid4()
         return str(user)
 
     @staticmethod

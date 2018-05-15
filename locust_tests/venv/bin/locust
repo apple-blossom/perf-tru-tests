@@ -1,0 +1,10 @@
+#!/home/kate/Work/perf-tru-tests/venv/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'locustio==0.8.1','console_scripts','locust'
+__requires__ = 'locustio==0.8.1'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('locustio==0.8.1', 'console_scripts', 'locust')()
+    )

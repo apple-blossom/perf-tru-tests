@@ -30,7 +30,7 @@ requests==2.18.4
 SecretStorage==2.3.1
 selenium==3.4.3
 six==1.11.0
-urllib3==1.22
+urllib3==1.26.5
 virtualenv==15.1.0
 Werkzeug==0.14.1
 

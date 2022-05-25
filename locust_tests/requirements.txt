@@ -23,7 +23,7 @@ pycparser==2.18
 pycrypto==2.6.1
 pycryptodome==3.6.1
 pycryptodomex==3.6.1
-PyJWT==1.6.1
+PyJWT==2.4.0
 pyxdg==0.25
 pyzmq==17.0.0
 requests==2.18.4
